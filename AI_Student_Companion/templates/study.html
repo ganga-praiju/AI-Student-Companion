@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Study Buddy</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-circle">A</div>
+      <span>Companion</span>
+    </div>
+    <nav>
+      <a href="/">Dashboard</a>
+      <a href="/study" class="active">Study Buddy</a>
+      <a href="/health">Health Coach</a>
+    </nav>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <h1>Study Buddy</h1>
+    <p class="subtitle">
+      Paste your notes or a topic below, and let AI help you understand it better.
+    </p>
+
+    <form method="POST" class="study-layout">
+
+      <!-- INPUT -->
+      <div class="panel">
+        <h3>Input Material</h3>
+        <textarea name="text" placeholder="Paste lecture notes, textbook text, or just a topic name here...">{{ text }}</textarea>
+
+        <div class="buttons">
+          <button class="btn-primary" name="action" value="explain">📘 Explain</button>
+          <button class="btn-secondary" name="action" value="summarize">📝 Summarize</button>
+          <button class="btn-secondary" name="action" value="quiz">❓ Generate Quiz</button>
+        </div>
+      </div>
+
+      <!-- OUTPUT -->
+      <div class="panel result">
+        {% if result_type == 'quiz' %}
+          {% if quiz_data.questions %}
+          <!-- QUIZ VIEW -->
+          <div class="quiz-container">
+            <h2>❓ Quick Quiz</h2>
+            <form id="quizForm" class="quiz-form">
+              {% for question in quiz_data.questions %}
+              <div class="quiz-question">
+                <h3>Q{{ loop.index }}. {{ question.question }}</h3>
+                <div class="quiz-options">
+                  {% set letters = ['A', 'B', 'C', 'D'] %}
+                  {% for option in question.options %}
+                  <label class="quiz-option">
+                    <input type="radio" name="q{{ loop.index0 }}" value="{{ loop.index0 }}" required>
+                    <span>{{ letters[loop.index0] }}) {{ option }}</span>
+                  </label>
+                  {% endfor %}
+                </div>
+              </div>
+              {% endfor %}
+              <button type="button" class="btn-submit-quiz" onclick="submitQuiz()">Check Answers</button>
+            </form>
+            <div id="quizResult" class="quiz-result"></div>
+          </div>
+          {% elif quiz_data.error %}
+          <p style="color: #d32f2f; padding: 20px;">⚠️ {{ quiz_data.error }}</p>
+          {% else %}
+          <p style="color: #666; padding: 20px;">Loading quiz...</p>
+          {% endif %}
+        {% else %}
+        <!-- TEXT RESULT VIEW -->
+        <pre>{{ result if result else "Results will appear here" }}</pre>
+        {% endif %}
+      </div>
+
+    </form>
+
+  </main>
+</div>
+
+</body>
+</html>
+<script>
+function submitQuiz() {
+  const form = document.getElementById('quizForm');
+  const formData = new FormData(form);
+  
+  // Get all answers
+  const answers = {};
+  for (let [key, value] of formData.entries()) {
+    answers[key] = value;
+  }
+  
+  console.log('Answers:', answers);
+  
+  // Check if all questions answered
+  if (Object.keys(answers).length < 3) {
+    alert('Please answer all questions!');
+    return;
+  }
+  
+  // Send to server
+  fetch('/check-quiz', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ answers: answers })
+  })
+  .then(response => response.json())
+  .then(data => {
+    console.log('Response data:', data);
+    displayResults(data);
+  })
+  .catch(error => {
+    console.error('Error:', error);
+    alert('Error: ' + error.message);
+  });
+}
+
+function displayResults(data) {
+  const resultDiv = document.getElementById('quizResult');
+  const questions = document.querySelectorAll('.quiz-question h3');
+  const options = ['A', 'B', 'C', 'D'];
+  
+  let resultHTML = '<div class="quiz-score">';
+  resultHTML += `<h3>Score: ${data.score}/${data.total} (${Math.round(data.percentage)}%)</h3>`;
+  resultHTML += `<p class="teacher-feedback">${data.feedback}</p>`;
+  resultHTML += '</div>';
+  
+  resultHTML += '<div class="quiz-detailed-results">';
+  
+  for (let i = 0; i < data.total; i++) {
+    const result = data.results[String(i)];
+    
+    if (!result) {
+      console.log('No result for question', i);
+      continue;
+    }
+    
+    const isCorrect = result.is_correct;
+    const userOption = options[result.user_answer];
+    const correctOption = options[result.correct_answer];
+    const questionText = questions[i] ? questions[i].textContent : `Question ${i + 1}`;
+    
+    resultHTML += `<div class="result-item ${isCorrect ? 'correct' : 'incorrect'}">`;
+    resultHTML += `<p class="result-question">${questionText}</p>`;
+    resultHTML += `<p class="result-detail">Your answer: <strong>${userOption}</strong></p>`;
+    
+    if (!isCorrect) {
+      resultHTML += `<p class="result-detail correct-answer">Correct answer: <strong>${correctOption}</strong></p>`;
+      resultHTML += `<p class="teacher-tip">💡 Understanding: The correct option helps you better grasp this concept.</p>`;
+    } else {
+      resultHTML += `<p class="teacher-tip">✓ Great! You understand this concept well.</p>`;
+    }
+    
+    resultHTML += '</div>';
+  }
+  
+  resultHTML += '</div>';
+  
+  // Set the HTML and make it visible
+  resultDiv.innerHTML = resultHTML;
+  resultDiv.style.display = 'block';
+  
+  // Hide form
+  const form = document.getElementById('quizForm');
+  if (form) form.style.display = 'none';
+  
+  const btn = document.querySelector('.btn-submit-quiz');
+  if (btn) btn.style.display = 'none';
+  
+  console.log('Results displayed');
+}
+</script>
+</script>

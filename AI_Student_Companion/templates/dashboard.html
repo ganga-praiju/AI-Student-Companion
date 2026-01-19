@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>AI Student Companion</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-circle">A</div>
+      <span>Companion</span>
+    </div>
+    <nav>
+      <a href="/" class="active">Dashboard</a>
+      <a href="/study">Study Buddy</a>
+      <a href="/health">Health Coach</a>
+    </nav>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+    <h1>Welcome back, Student!</h1>
+    <p class="subtitle">
+      Ready to crush your goals today? Choose a module below to get started.
+    </p>
+
+    <div class="cards">
+      <div class="card" onclick="location.href='/study'">
+        <h3>📘 Study Buddy</h3>
+        <p>Explain complex topics, summarize notes, and generate quizzes instantly.</p>
+      </div>
+
+      <div class="card" onclick="location.href='/health'">
+        <h3>💚 Health Coach</h3>
+        <p>Get personalized workout and diet plans tailored to your goals.</p>
+      </div>
+    </div>
+  </main>
+
+</div>
+
+</body>
+</html>

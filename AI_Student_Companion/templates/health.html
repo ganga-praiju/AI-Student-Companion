@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Health Coach</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-circle">A</div>
+      <span>Companion</span>
+    </div>
+    <nav>
+      <a href="/">Dashboard</a>
+      <a href="/study">Study Buddy</a>
+      <a href="/health" class="active">Health Coach</a>
+    </nav>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <h1>Health Coach</h1>
+    <p class="subtitle">
+      Get a personalized fitness and nutrition plan tailored to your student lifestyle.
+    </p>
+
+    {% if plan == 'generated' %}
+    <!-- RESULTS VIEW -->
+    <div class="plan-results">
+      <div class="plan-header">
+        <h2>Your Personal Plan</h2>
+        <form method="GET" action="/health" style="display: inline;">
+          <button type="submit" class="btn-start-over">Start Over</button>
+        </form>
+      </div>
+
+      <!-- Tabs -->
+      <div class="plan-tabs">
+        <button class="tab-button active" onclick="showTab('workout')">💪 Workout Schedule</button>
+        <button class="tab-button" onclick="showTab('nutrition')">🍽️ Nutrition Plan</button>
+      </div>
+
+      <!-- Workout Schedule Tab -->
+      <div id="workout" class="tab-content active">
+        <div class="workout-grid">
+          {% for day, exercises in plan_data.workout_plan.items() %}
+          <div class="workout-card">
+            <h3>{{ day }}</h3>
+            <ul>
+              {% for exercise in exercises %}
+              <li>{{ exercise }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Nutrition Plan Tab -->
+      <div id="nutrition" class="tab-content">
+        <div class="nutrition-grid">
+          {% for meal, details in plan_data.nutrition_plan.items() %}
+          <div class="nutrition-card">
+            <h3>{{ meal }}</h3>
+            <p>{{ details }}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    {% else %}
+    <!-- FORM VIEW -->
+    <div class="health-container">
+      <div class="health-panel">
+        <h3>Create Your Plan</h3>
+        <p class="panel-subtitle">Tell us a bit about yourself.</p>
+
+        {% if plan == 'incomplete' %}
+        <div class="error-message">⚠️ Please fill in all fields to generate your personalized plan.</div>
+        {% elif plan.startswith('error') %}
+        <div class="error-message">❌ {{ plan }}</div>
+        {% endif %}
+
+        <form method="POST" class="health-form">
+
+          <!-- Age and Gender Row -->
+          <div class="form-row">
+            <div class="form-group">
+              <label>Age</label>
+              <input type="text" name="age" placeholder="e.g. 21" value="{{ age }}">
+            </div>
+            <div class="form-group">
+              <label>Gender</label>
+              <select name="gender">
+                <option value="">Select Gender</option>
+                <option value="Male" {% if gender == 'Male' %}selected{% endif %}>Male</option>
+                <option value="Female" {% if gender == 'Female' %}selected{% endif %}>Female</option>
+                <option value="Other" {% if gender == 'Other' %}selected{% endif %}>Other</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Primary Goal -->
+          <div class="form-group">
+            <label>Primary Goal</label>
+            <div class="radio-group">
+              <label class="radio-option">
+                <input type="radio" name="goal" value="Weight Loss" {% if goal == 'Weight Loss' %}checked{% endif %}>
+                <span>Weight Loss</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="goal" value="Muscle Gain" {% if goal == 'Muscle Gain' %}checked{% endif %}>
+                <span>Muscle Gain</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Diet Preference -->
+          <div class="form-group">
+            <label>Diet Preference</label>
+            <div class="radio-group">
+              <label class="radio-option">
+                <input type="radio" name="diet" value="Vegetarian" {% if diet == 'Vegetarian' %}checked{% endif %}>
+                <span>Vegetarian</span>
+              </label>
+              <label class="radio-option">
+                <input type="radio" name="diet" value="Non-Veg" {% if diet == 'Non-Veg' %}checked{% endif %}>
+                <span>Non-Veg</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button type="submit" class="btn-generate">Generate Plan</button>
+
+        </form>
+      </div>
+    </div>
+    {% endif %}
+
+  </main>
+</div>
+
+<script>
+function showTab(tabName) {
+  // Hide all tabs
+  const tabs = document.querySelectorAll('.tab-content');
+  tabs.forEach(tab => tab.classList.remove('active'));
+  
+  // Remove active class from all buttons
+  const buttons = document.querySelectorAll('.tab-button');
+  buttons.forEach(btn => btn.classList.remove('active'));
+  
+  // Show selected tab
+  document.getElementById(tabName).classList.add('active');
+  
+  // Add active class to clicked button
+  event.target.classList.add('active');
+}
+</script>
+
+</body>
+</html>
