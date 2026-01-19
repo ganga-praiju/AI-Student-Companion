@@ -50,58 +50,22 @@ See `requirements.txt` for complete dependencies.
 
 ---
 
-## 🚀 Installation & Setup
 
-### 1. **Clone the Repository**
-```bash
-git clone https://github.com/yourusername/AI_Student_Companion.git
-cd AI_Student_Companion
-```
 
-### 2. **Create Virtual Environment** (Optional but Recommended)
-```bash
-python -m venv venv
-source venv/Scripts/activate  # On Windows
-```
-
-### 3. **Install Dependencies**
-```bash
-pip install -r requirements.txt
-```
-
-### 4. **Run the Application**
+### **Run the Application**
 ```bash
 python app.py
 ```
 
 The app will start at: **http://localhost:3000**
 
-### 5. **First Run - AI Model Loading**
+### **First Run - AI Model Loading**
 On first run, AI models (~2.5 GB) will be downloaded and cached:
 - `facebook/bart-large-cnn` - For text summarization
 - `deepset/roberta-base-squad2` - For question answering
 - `gpt2` - For text generation
 
 This may take 5-10 minutes. After first run, models load instantly from cache.
-
----
-
-## 📁 Project Structure
-
-```
-AI_Student_Companion/
-├── app.py                 # The main brain of the app 🧠
-├── requirements.txt       # All the packages we need
-├── README.md             # This helpful guide!
-├── static/
-│   └── style.css         # Makes things pretty ✨
-└── templates/
-    ├── dashboard.html    # Your starting point
-    ├── study.html        # Where the learning happens
-    └── health.html       # Your fitness buddy interface
-```
-
----
 
 ## 💻 How to Use
 
@@ -264,30 +228,6 @@ app.run(host="0.0.0.0", port=3000, debug=False)  # Way safer! 🔐
 - [ ] Multi-language Support
 - [ ] Voice Input/Output
 
----
-
-## 🐛 Troubleshooting
-
-### Issue: "Models loading slowly"
-**Solution**: First run takes time. After initial load, models are cached for instant access.
-
-### Issue: "Port 3000 already in use"
-**Solution**: Change port in `app.py` or close other applications using it.
-
-### Issue: "Jinja2 UndefinedError"
-**Solution**: Clear browser cache and refresh the page.
-
-### Issue: "Quiz results not showing"
-**Solution**: Open browser console (F12), check for errors, and report them.
-
----
-
-## 📜 License
-
-MIT License - basically, do whatever you want with it! 🎉 (Just maybe give credit where it's due)
-
----
-
 ## 🤝 Wanna Help Out?
 
 Contributions are super welcome! Here's how:
@@ -297,24 +237,12 @@ Contributions are super welcome! Here's how:
 4. Push it up (`git push origin feature/your-cool-idea`)
 5. Open a Pull Request and let's chat! 💬
 
----
-
-## 📧 Contact & Support
-
-For issues, questions, or suggestions, please:
-- Open an issue on GitHub
-- Contact: [your-email@example.com](mailto:your-email@example.com)
-
----
-
 ## 🎉 Acknowledgments
 
 - **Hugging Face** - For pre-trained AI models
 - **Flask** - For the web framework
 - **PyTorch & Transformers** - For deep learning capabilities
 - **All Students** - Who use this app to learn
-
----
 
 ## 📊 By The Numbers
 
@@ -329,3 +257,4 @@ For issues, questions, or suggestions, please:
 **Made with ❤️ for Students | Last Updated: January 2026**
 
 **Start Learning Today! 🚀**
+
