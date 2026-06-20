@@ -228,14 +228,6 @@ app.run(host="0.0.0.0", port=3000, debug=False)  # Way safer! 🔐
 - [ ] Multi-language Support
 - [ ] Voice Input/Output
 
-## 🤝 Wanna Help Out?
-
-Contributions are super welcome! Here's how:
-1. Fork the repo (make your own copy)
-2. Create a new branch for your feature (`git checkout -b feature/your-cool-idea`)
-3. Make your changes and commit (`git commit -m 'Added this awesome thing'`)
-4. Push it up (`git push origin feature/your-cool-idea`)
-5. Open a Pull Request and let's chat! 💬
 
 ## 🎉 Acknowledgments
 
@@ -244,17 +236,9 @@ Contributions are super welcome! Here's how:
 - **PyTorch & Transformers** - For deep learning capabilities
 - **All Students** - Who use this app to learn
 
-## 📊 By The Numbers
-
-- **AI Models**: 3 powerful ones (BART, RoBERTa, GPT-2)
-- **Learning Modes**: 3 flavors (Explain, Summarize, Quiz)
-- **Topics**: Everything! No restrictions 🌍
-- **Quiz Questions**: Changes based on what you study
-- **Health Plans**: Tons of combo possibilities
-
 ---
 
-**Made with ❤️ for Students | Last Updated: January 2026**
+**Made with ❤️ for Students**
 
 **Start Learning Today! 🚀**
 
